@@ -1,28 +1,38 @@
 import flet as ft
 
-def main(page: ft.Page):
-    def clicked(e):
-        if textFeild.value != "":
-            task_view.controls.append(ft.Checkbox(label=textFeild.value))
-            textFeild.value = ""
-            page.update()
+class ToDo(ft.UserControl):
+    def build(self):
+        self.Addtask = ft.TextField(hint_text="Add a new task", expand=True)
+        self.task_viwe = ft.Column()
 
-    textFeild = ft.TextField(hint_text="Add new task", expand=True)
-    task_view = ft.Column()
-    viwe = ft.Column(
-        width=600,
-        controls=[
+        return ft.Column(
+            width=600,
+            controls=[
             ft.Row(
-                controls=[
-                    textFeild,
-                    ft.FloatingActionButton(icon=ft.icons.ADD,on_click=clicked),
-                ],
-            ),
-            task_view,
-        ],
-    )
+                controls = [
+                    self.Addtask,
+                    ft.FloatingActionButton(icon=ft.icons.ADD,on_click=self.add_clicked),
+                    ],
+                ),
+                self.task_viwe,
+            ],
+        )
+
+    def add_clicked(self, e):
+        self.task_viwe.controls.append(ft.Checkbox(label=self.Addtask.value))
+        self.Addtask.value = ""
+        self.update()
+
+def main(page: ft.Page):
+    page.title = "TO DO APP"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.add(viwe)
+    page.update()
+
+    todo = ToDo()
+
+    page.add(todo)
 
 
-ft.app(target=main)
+
+
+ft.app(target=main, view=ft.AppView.WEB_BROWSER)
